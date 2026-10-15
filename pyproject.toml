@@ -1,0 +1,19 @@
+[project]
+name = "speluncaDWC26"
+version = "0.1.0"
+description = "SPELUNCA — ExxonMobil DataWorks Challenge 2026: ML-assisted history matching and production forecasting"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+filterwarnings = ["ignore::sklearn.exceptions.ConvergenceWarning"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]

@@ -1,0 +1,111 @@
+name: CI/CD
+
+# CI  : every push to main and every pull request -> guard, lint, test
+# CD  : a version tag (v*) or a manual run -> build SPELUNCA.zip for the portal
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    name: Guard private and competition files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail if secrets or competition data are tracked
+        run: |
+          bad=$(git ls-files | grep -iE '(^|/)\.env$|(^|/)\.env\.[^/]+$|^data/(raw|interim|processed)/|^dataset/|(^|/)dwc26/|\.(xlsx|xls|xlsm|pptx)$' \
+                | grep -vE '(^|/)\.env\.example$|/\.gitkeep$' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::These files must not be in git:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "No secrets or competition data tracked."
+
+      - name: Fail if any tracked file is over 50 MB
+        run: |
+          big=$(git ls-files -z | xargs -0 -r du -b | awk '$1 > 50000000 {print $2" ("$1" bytes)"}')
+          if [ -n "$big" ]; then
+            echo "::error::Files over 50 MB:"
+            echo "$big"
+            exit 1
+          fi
+          echo "No oversized files."
+
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check .
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements-dev.txt
+      - run: pytest
+
+  package:
+    name: Build submission zip
+    needs: [guard, lint, test]
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build SPELUNCA.zip from tracked files only
+        run: git archive --format=zip --prefix=SPELUNCA/ -o SPELUNCA.zip HEAD
+
+      - name: Check portal size limit (100 MB)
+        run: |
+          size=$(stat -c%s SPELUNCA.zip)
+          echo "SPELUNCA.zip = $size bytes"
+          if [ "$size" -gt 100000000 ]; then
+            echo "::error::SPELUNCA.zip exceeds the 100 MB portal limit"
+            exit 1
+          fi
+
+      - name: Check no secrets or data inside the zip
+        run: |
+          if unzip -Z1 SPELUNCA.zip | grep -E '(^|/)\.env$|/data/raw/[^/]+$' | grep -v '\.gitkeep$'; then
+            echo "::error::Private or competition files found inside SPELUNCA.zip"
+            exit 1
+          fi
+          unzip -Z1 SPELUNCA.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SPELUNCA-submission
+          path: SPELUNCA.zip
+          retention-days: 30

@@ -1,0 +1,23 @@
+Copyright (c) 2026 Team SPELUNCA
+Muhammad Aliff Adam bin Sultan and Qistina Aqilah Abdul Razak Tuah
+
+All rights reserved.
+
+1. Scope. This licence covers the source code, notebooks, configuration and written research in this
+   repository ("the Work"). It does not cover the ExxonMobil DataWorks Challenge 2026 (DWC26) dataset or any
+   material supplied by the organisers; that material is not included in this repository and remains subject to
+   the organisers' own terms.
+
+2. Permitted use. The organisers and judges of DWC26 may copy, run and inspect the Work for the purpose of
+   evaluating the team's competition entry.
+
+3. Restrictions. Except as stated in section 2, no part of the Work may be copied, modified, distributed,
+   published or used for any other purpose without prior written permission from all copyright holders.
+
+4. Third-party software. The Work depends on third-party open-source packages (listed in requirements.txt).
+   Each package is used under its own licence; this licence does not change those terms.
+
+5. No warranty. THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+   LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT
+   SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE WORK OR ITS USE.

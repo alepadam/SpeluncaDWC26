@@ -1,0 +1,126 @@
+# speluncaDWC26 — pipeline configuration
+# Every path is relative to the project root. Change settings here, not in the code.
+# Private / machine-specific values go in .env, never here:
+#   DWC26_DATA_DIR in .env, if set, overrides paths.raw (recommended: keep the dataset OUTSIDE the repo).
+
+project:
+  team: SPELUNCA                        # source-code submission = SPELUNCA.zip, <= 100 MB (built by CI)
+  random_seed: 42
+
+paths:
+  raw: data/raw                         # unzipped dwc26 files; sub-folders (e.g. TestCases/) are searched
+  processed: data/processed
+  figures: outputs/figures
+  tables: outputs/tables
+  deliverable: outputs/deliverable
+  logs: outputs/logs
+
+files:
+  introduction: "01 Introduction.xlsx"
+  field_production: "02 Field Production.xlsx"
+  grid:                                 # one sheet per case "Case N"; optional, only for the 01_eda §9 check
+    - "03 Train Cases 1.xlsx"           # Cases 1-20
+    - "04 Train Cases 2.xlsx"           # Cases 21-40
+    - "05 Train Cases 3.xlsx"           # Cases 41-60
+    - "06 Train Cases 4.xlsx"           # Cases 61-70
+    - "07  Validation Cases.xlsx"       # Cases 71-85 (NOTE: two spaces in the real file name)
+    - "08 Test Cases.xlsx"              # Cases 86-100
+  template: "09 Template Deliverable.xlsx"
+
+sheets:
+  uncertainty: "Uncertainty Values"
+  field: "Field Production"
+  curves:                               # simulation curve sheets inside 02 Field Production
+    oil_cum: "Oil production cumulative"
+    gas_cum: "Gas production cumulative"
+    water_cum: "Water production cumulative"
+  case_label_row: 1                     # row 0 = Y1..Y101, row 1 = case labels, row 2 = units
+  data_start_row: 3
+  history_column: "RAMP_History"        # 101st column — observed history embedded, NOT a case
+
+observed_columns:                       # 'Field Production' sheet
+  date: "Date"
+  oil_rate: "Oil production rate (STB/d)"
+  gas_rate: "Gas production rate (MSCF/d)"
+  water_rate: "Water production rate (STB/d)"
+  water_inj: "Water injection rate (STB/d)"
+
+grid:                                   # files 03-08 (optional; checked in 01_eda.ipynb §9, src/grid.py)
+  null_value: -999.25                   # placeholder in inactive cells (their PORV is 0)
+  cells_per_case: 90365                 # confirmed
+  active_cells_per_case: 42512          # confirmed
+  # Confirmed 14 Oct 2026: all cases share one base grid and one initial state; the 4 multipliers are the only
+  # differences, so grids add no information beyond the parameters. HCPV scales exactly with the porosity
+  # multiplier: HCPV = hcpv_base_rb x porosity multiplier (Case 1: 140,074,270 rb at multiplier 1.0823).
+  hcpv_base_rb: 129421914.67            # initial hydrocarbon pore volume at porosity multiplier 1.0 [rb]
+
+parameters:                             # 'Uncertainty Values' sheet
+  case_col: "Item"
+  names:
+    - "Fault Transmissibility"
+    - "Porosity Multiplier"
+    - "Permeability Multiplier"
+    - "Aquifer Pore Volume"
+  log_transform:
+    - "Permeability Multiplier"
+
+split:                                  # organisers' split, inclusive case numbers
+  train: [1, 70]
+  validation: [71, 85]
+  test: [86, 100]
+
+history:                                # 41 quarterly dates
+  start: "1998-01-01"
+  end: "2008-01-01"
+
+matching:                               # SRQ1-SRQ2 (loss function, deck slide 27 step 4)
+  date_conventions: ["start", "end"]    # both tested; the better one is used and both are reported
+  sigma_rel: 0.05                       # observation error = 5% of observed value [Assumption]
+  sigma_rel_sensitivity: [0.03, 0.10]
+  sigma_floor_frac: 0.01                # error floor = 1% of the phase's max observed cumulative
+  phase_weights: {oil: 1.0, gas: 1.0, water: 1.0}
+  accept_top_fraction: 0.15             # baseline: accept best 15% of the 100 cases [Assumption]
+
+proxy:                                  # SRQ4 (deck: "ML proxy model training")
+  pca_variance: 0.99999                 # per phase; history variance is ~99.96% one mode (porosity), so a
+                                        # loose target would discard the smaller permeability/aquifer/fault effects
+  min_components: 3                     # per phase
+  kernel: "matern52"                    # "matern52" or "rbf"
+  gp_restarts: 3
+
+optimization:                           # SRQ2 (deck: "Optimization (History Matching)")
+  de_maxiter: 200                       # differential evolution on the proxy
+  de_popsize: 30
+  lhs_samples: 20000                    # Latin-hypercube samples for the posterior
+  posterior_keep: 500                   # best samples kept for uncertainty
+
+forecast:                               # SRQ5 — 80 quarterly dates (template)
+  start: "2008-04-01"
+  end: "2028-01-01"
+  fit_window_start: "2004-01-01"        # late history used to fit decline curves
+  backtest_fit_start: "2001-01-01"      # temporal backtest: fit 2001-2004 ...
+  backtest_cut: "2004-01-01"            # ... forecast 2004-2008, compare with actual
+  b_bounds: [0.0, 1.0]                  # Arps exponent
+  min_points: 6                         # minimum quarters for a fit
+  wor_min: 1.0e-4                       # WOR points below this are ignored in the water fit
+  wor_max: 100.0                        # safety cap on extrapolated WOR
+  method: "auto"                        # "auto" = pick by backtest on validation cases; or "decline" / "ml_autoregressive"
+  water_model: "auto"                   # "auto" = pick by backtest on validation cases; or "wor_vs_np" / "wor_vs_time"
+  anchor: "observed"                    # "observed": continue from observed 2008 cumulatives; "model": own value
+
+best10:                                 # SRQ6 (deck slide 31: "Pick the best 10 forecast cases")
+  n_cases: 10
+  min_distance: 0.05                    # min distance between picks in scaled parameter space (diversity)
+  percentiles: [0.10, 0.50, 0.90]       # reported as P90 (low), P50, P10 (high)
+
+sensitivity:                            # SRQ3
+  sobol_n: 256                          # Saltelli base sample (power of 2); x6 model runs
+  breakthrough_threshold_stb: 1.0
+
+gas:
+  rs_expected: 0.3633                   # MSCF/STB at the two dates checked
+  rs_tolerance: 0.02                    # flag cases outside +/- 2%
+
+deliverable:
+  output_name: "SPELUNCA_Template_Deliverable.xlsx"
+  date_format: "mm/dd/yyyy"
