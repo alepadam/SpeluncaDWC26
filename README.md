@@ -1,4 +1,4 @@
-# speluncaDWC26
+# SpeluncaDWC26
 
 **ExxonMobil DataWorks Challenge 2026 (DWC26)**
 
@@ -7,7 +7,8 @@
 | Member |
 |---|
 | Muhammad Aliff Adam bin Sultan |
-| Qistina Aqilah Abdul Razak Tuah |
+| Qistina Aqilah binti Abdul Razak Tuah |
+| Muhammad Adam Harith bin Ahmad Zaki |
 
 ## What we are researching
 
@@ -18,18 +19,18 @@ each run with different values of four uncertain parameters: fault transmissibil
 permeability multiplier and aquifer pore volume. We have to find which parameter values reproduce the field's
 history and then forecast oil, gas and water production for the next 20 years (2008 → 2028).
 
-**Main research question:** can a machine-learning proxy, trained on the 100 simulated cases, identify the parameter
+**Main research question:** **Can a machine-learning proxy, trained on the 100 simulated cases, identify the parameter
 values that match the observed 1998–2008 production, and use them to forecast cumulative oil, gas and water
-production to 2028 with an honest uncertainty range?
+production to 2028 with an honest uncertainty range?**
 
-| Sub-question | In short |
-|---|---|
-| SRQ1 — Time alignment | How should simulated and observed production be lined up in time? |
-| SRQ2 — History matching | Which parameter values best match the observed history, and is the answer unique? |
-| SRQ3 — Parameter influence | Which of the four parameters control production? |
-| SRQ4 — Proxy accuracy | How accurately can an ML proxy reproduce the simulator for unseen cases? |
-| SRQ5 — Extrapolation | Can we forecast reliably 20 years beyond the data, and which method does it best? |
-| SRQ6 — Best 10 forecasts and uncertainty | What are the 10 best forecasts to 2028, and how uncertain are they? |
+| Sub-question | About | Detail |
+|---|---|---|
+| SRQ1 | Time alignment | How should simulated and observed production be lined up in time? |
+| SRQ2 | History matching | Which parameter values best match the observed history, and is the answer unique? |
+| SRQ3 | Parameter influence | Which of the four parameters control production? |
+| SRQ4 | Proxy accuracy | How accurately can an ML proxy reproduce the simulator for unseen cases? |
+| SRQ5 | Extrapolation | Can we forecast reliably 20 years beyond the data, and which method does it best? |
+| SRQ6 | Best 10 forecasts and uncertainty | What are the 10 best forecasts to 2028, and how uncertain are they? |
 
 Full questions and hypotheses: `research/01_research_questions.md`.
 
