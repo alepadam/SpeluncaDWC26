@@ -33,20 +33,20 @@ production to 2028 with an honest uncertainty range?
 
 Full questions and hypotheses: `research/01_research_questions.md`.
 
-## Methodology (simple)
+## Methodology 
 
-1. **Prepare the data** — line up the simulated and observed production on the same 41 quarterly dates and check
+1. **Prepare the data** : line up the simulated and observed production on the same 41 quarterly dates and check
    data quality.
-2. **Train an ML proxy** — learn the link from the 4 parameters to the production curves (principal component
+2. **Train an ML proxy** : learn the link from the 4 parameters to the production curves (principal component
    analysis + Gaussian process), so new parameter values can be tested almost instantly instead of running the simulator.
    Trained on cases 1–70, tuned on 71–85, tested once on 86–100.
-3. **History matching** — search the parameter space for the values whose predicted production best matches the
+3. **History matching** : search the parameter space for the values whose predicted production best matches the
    observed field (weighted least-squares loss, differential evolution), keeping every set that fits well.
-4. **Forecast to 2028** — forecast production after 2008 with two methods (decline curves and an ML time-series
+4. **Forecast to 2028** : forecast production after 2008 with two methods (decline curves and an ML time-series
    model); the one with the lower error when tested on 2004 → 2008 is used.
-5. **Best 10 forecasts** — pick the 10 best-matching, distinct parameter sets, forecast each to 2028, report P90 / P50 /
+5. **Best 10 forecasts** : pick the 10 best-matching, distinct parameter sets, forecast each to 2028, report P90 / P50 /
    P10, and fill the competition template.
-6. **Explain** — measure how much each parameter drives the results (Sobol sensitivity analysis).
+6. **Explain** : measure how much each parameter drives the results (Sobol sensitivity analysis).
 
 Full method: `research/03_methodology.md` · formulas: `research/04_formulas.md` · references: `research/05_references.md`.
 
