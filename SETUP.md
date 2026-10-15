@@ -13,16 +13,6 @@ pip install -r requirements-dev.txt
 cp .env.example .env                   # Windows: copy .env.example .env
 ```
 
-### Where the data goes (sensitive — never in git)
-Recommended: keep the unzipped `dwc26` folder **outside** this repository and point to it in `.env`:
-
-```
-DWC26_DATA_DIR=C:/Users/you/Private/dwc26
-```
-
-Alternatively put it in `data/raw/` (ignored by git). Sub-folders such as `TestCases/` are searched
-automatically. `.env` holds only this path — no passwords or other secrets are needed.
-
 ## Run
 
 All work is done in notebooks; `src/*.py` only holds the functions they call.
@@ -91,7 +81,3 @@ speluncaDWC26/
 ```bash
 git tag v1.0 && git push origin v1.0      # or GitHub → Actions → CI/CD → Run workflow
 ```
-
-## Deadlines (3:00 PM MYT)
-- Source code (`SPELUNCA.zip`, ≤ 100 MB): **Fri 16 Oct 2026**
-- Power BI, video link, report: **Tue 20 Oct 2026**
