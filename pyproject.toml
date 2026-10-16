@@ -1,7 +1,7 @@
 [project]
 name = "speluncaDWC26"
 version = "0.1.0"
-description = "SPELUNCA — ExxonMobil DataWorks Challenge 2026: ML-assisted history matching and production forecasting"
+description = "SPELUNCA: ExxonMobil DataWorks Challenge 2026: ML-assisted history matching and production forecasting"
 requires-python = ">=3.12"
 
 [tool.pytest.ini_options]

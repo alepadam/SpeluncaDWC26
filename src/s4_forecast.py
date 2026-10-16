@@ -1,13 +1,13 @@
-"""Step 4 — Forecast production 20 years ahead (SRQ5: can we extrapolate reliably beyond 2008?).
+"""Step 4: Forecast production 20 years ahead (SRQ5: can we extrapolate reliably beyond 2008?).
 
 The provided simulation curves end at 2008-01-01 (deck slide 31), so the forecast must extrapolate.
 Physics-constrained forecaster, applied to any set of 1998-2008 cumulative curves
 (a simulated case, or a proxy prediction for an optimized parameter set):
-  * Oil   — hyperbolic Arps decline fitted on late history (F16), 0 <= b <= 1, continued
+  * Oil:   hyperbolic Arps decline fitted on late history (F16), 0 <= b <= 1, continued
             analytically from 2008 with the decline rate it has reached by then (F17).
-  * Water — ln(WOR) = a + c·Np trend fitted on late history (F18), anchored to the last WOR, c >= 0,
+  * Water: ln(WOR) = a + c·Np trend fitted on late history (F18), anchored to the last WOR, c >= 0,
             WOR capped; water volume per quarter = WOR × oil volume.
-  * Gas   — solution gas: Rs = ΔGp/ΔNp over the fit window; gas volume = Rs × oil volume (F13).
+  * Gas:   solution gas, Rs = ΔGp/ΔNp over the fit window; gas volume = Rs × oil volume (F13).
   Cumulatives are accumulated quarter by quarter with real day counts (F15), so they never decrease.
 
 Validation (temporal backtest): repeat with data up to 2004-01-01 only, forecast 2004–2008, compare
@@ -182,7 +182,7 @@ def case_curves(sim_cum: dict, case: str, until=None) -> dict[str, pd.Series]:
 
 
 def population_wor(sim_cum: dict, cases: list[str], fit_start, cfg_f: dict, rs_default: float) -> dict | None:
-    """Median (a, c) of each WOR trend over cases with enough water — fallback for water-free curves."""
+    """Median (a, c) of each WOR trend over cases with enough water; used as a fallback for water-free curves."""
     fits = {k: [] for k in WATER_MODELS}
     for c in cases:
         try:
@@ -363,7 +363,7 @@ def run(cfg: dict, state: dict) -> dict:
         ax.axvline(cut, color="0.6", lw=0.8)
         ax.set_title(f"{c0} cumulative {k} [{UNITS[k]}]")
         ax.legend(fontsize=8)
-    fig.suptitle("Temporal backtest — fitted up to 2004-01-01, forecast to 2008-01-01")
+    fig.suptitle("Temporal backtest: fitted up to 2004-01-01, forecast to 2008-01-01")
     fig.tight_layout()
     fig.savefig(F / "srq5_backtest.png", dpi=150)
     plt.close(fig)

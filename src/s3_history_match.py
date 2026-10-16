@@ -1,4 +1,4 @@
-"""Step 3 — Optimization / history matching (SRQ2: which parameters reproduce the observed history?).
+"""Step 3: Optimization / history matching (SRQ2: which parameters reproduce the observed history?).
 
 Deck objective 2: "identify the optimal set of reservoir parameters that minimize the mismatch".
   A. Baseline: score the 100 simulated cases directly against the observed cumulatives.
@@ -105,7 +105,7 @@ def run(cfg: dict, state: dict) -> dict:
         ax.plot(obs_cum.index, obs[k], "k.", label="observed")
         ax.set_title(f"Cumulative {k} [{UNITS[k]}]")
         ax.legend(loc="upper left", fontsize=8)
-    fig.suptitle(f"History match — grey: 100 cases, blue: best {n_accept}, red: proxy optimum, black: observed")
+    fig.suptitle(f"History match. Grey: 100 cases, blue: best {n_accept}, red: proxy optimum, black: observed")
     fig.tight_layout()
     fig.savefig(F / "srq2_history_match.png", dpi=150)
     plt.close(fig)

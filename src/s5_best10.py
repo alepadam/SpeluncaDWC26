@@ -1,4 +1,4 @@
-"""Step 5 — Pick the best 10 forecast cases (SRQ6) — deck slide 31: "Pick the best 10 forecast cases".
+"""Step 5: Pick the best 10 forecast cases (SRQ6), as asked on deck slide 31: "Pick the best 10 forecast cases".
 
   1. Candidates = proxy-optimized parameter sets from step 3, ranked by history misfit.
   2. Greedy pick of 10, best misfit first, at least `min_distance` apart in scaled parameter space,
@@ -9,7 +9,7 @@
      spread compared with all 100 unmatched cases (did matching narrow the forecast?), and the same 10 cases
      forecast with the other method (model-form uncertainty).
   5. Business view (deck: "evaluate if the field will make money"): remaining oil 2008-2028, end rates,
-     water cut — per realization.
+     water cut, per realization.
   6. Whole-pipeline backtest against the observed field (match <= 2004, forecast 2004-2008).
 
 Outputs (outputs/tables/): srq6_best10.csv, srq6_best10_forecasts.csv (long format),
@@ -176,7 +176,7 @@ def run(cfg: dict, state: dict) -> dict:
     wc_cap = cfg["forecast"]["wor_max"] / (1.0 + cfg["forecast"]["wor_max"])
     table["wor_cap_reached"] = table["water_cut_2028"] >= wc_cap - 1e-9
     if table["wor_cap_reached"].any():
-        log.warning("%d of %d forecasts hit the WOR cap (%.0f) — water after the cap is a ceiling, not a trend",
+        log.warning("%d of %d forecasts hit the WOR cap (%.0f); water after the cap is a ceiling, not a trend",
                     int(table["wor_cap_reached"].sum()), len(table), cfg["forecast"]["wor_max"])
     table.to_csv(T / "srq6_best10.csv", index=False)
     table[["template_sheet", "oil_2008_2028_stb", "cum_oil_2028", "hcpv_rb", "np_2028_per_hcpv_stb_per_rb",
@@ -215,7 +215,7 @@ def run(cfg: dict, state: dict) -> dict:
         ax.plot(hist_index, obs_cum[k], "k.", ms=3, label="observed history")
         ax.set_title(f"Cumulative {k} [{UNITS[k]}]")
         ax.legend(loc="upper left", fontsize=8)
-    fig.suptitle(f"Best 10 history-matched forecasts to 2028 (red, {method}) — band excludes method error")
+    fig.suptitle(f"Best 10 history-matched forecasts to 2028 (red, {method}); the band excludes method error")
     fig.tight_layout()
     fig.savefig(F / "srq6_forecast_fan.png", dpi=150)
     plt.close(fig)

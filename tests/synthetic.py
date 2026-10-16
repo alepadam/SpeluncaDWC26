@@ -1,4 +1,4 @@
-"""Synthetic DWC26-like dataset for tests and CI — never the real data.
+"""Synthetic DWC26-like dataset for tests and CI (never the real data).
 
 Mirrors every structural fact confirmed from the real files:
   * 01 Introduction.xlsx: 'Nomenclature' + 'Uncertainty Values' (Item, 4 parameters, 100 cases)

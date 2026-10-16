@@ -57,7 +57,7 @@
 | R16 | Ahmed, T. (2019). *Reservoir Engineering Handbook* (5th ed.). Gulf Professional Publishing. | F3, F7, F11 |
 | R17 | Dake, L.P. (1978). *Fundamentals of Reservoir Engineering*. Elsevier. | F3 |
 | R18 | Aziz, K. & Settari, A. (1979). *Petroleum Reservoir Simulation*. Applied Science Publishers. | F8 |
-| R19 | Fetkovich, M.J. (1971). A simplified approach to water influx calculations — finite aquifer systems. *Journal of Petroleum Technology*, 23(7), 814–828. | F12 |
+| R19 | Fetkovich, M.J. (1971). A simplified approach to water influx calculations: finite aquifer systems. *Journal of Petroleum Technology*, 23(7), 814–828. | F12 |
 | R20 | Havlena, D. & Odeh, A.S. (1963). The material balance as an equation of a straight line. *Journal of Petroleum Technology*, 15(8), 896–900. | F39 |
 | R21 | Buckley, S.E. & Leverett, M.C. (1942). Mechanism of fluid displacement in sands. *Transactions of the AIME*, 146, 107–116. | F43 |
 | R22 | Corey, A.T. (1954). The interrelation between gas and oil relative permeabilities. *Producers Monthly*, 19(1), 38–41. | F44 |
@@ -77,4 +77,4 @@
 - ExxonMobil EMTech KL IT (2026). *DataWorks Challenge 2026 Kick-Off Ceremony* slides (6 Oct 2026).
 - ExxonMobil EMTech KL IT (2026). *DataWorks Challenge 2026 Starter Pack* (`dwc26.zip`): README.md,
   01 Introduction.xlsx, 02 Field Production.xlsx, 03–08 case workbooks, 09 Template Deliverable.xlsx, Kick Off.pptx.
-- ExxonMobil DWC26 portal — home, timeline, FAQ and dashboard pages (accessed 14 Oct 2026).
+- ExxonMobil DWC26 portal: home, timeline, FAQ and dashboard pages (accessed 14 Oct 2026).

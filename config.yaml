@@ -1,4 +1,4 @@
-# speluncaDWC26 — pipeline configuration
+# speluncaDWC26 pipeline configuration
 # Every path is relative to the project root. Change settings here, not in the code.
 # Private / machine-specific values go in .env, never here:
 #   DWC26_DATA_DIR in .env, if set, overrides paths.raw (recommended: keep the dataset OUTSIDE the repo).
@@ -36,7 +36,7 @@ sheets:
     water_cum: "Water production cumulative"
   case_label_row: 1                     # row 0 = Y1..Y101, row 1 = case labels, row 2 = units
   data_start_row: 3
-  history_column: "RAMP_History"        # 101st column — observed history embedded, NOT a case
+  history_column: "RAMP_History"        # 101st column: the observed history embedded, NOT a case
 
 observed_columns:                       # 'Field Production' sheet
   date: "Date"
@@ -94,7 +94,7 @@ optimization:                           # SRQ2 (deck: "Optimization (History Mat
   lhs_samples: 20000                    # Latin-hypercube samples for the posterior
   posterior_keep: 500                   # best samples kept for uncertainty
 
-forecast:                               # SRQ5 — 80 quarterly dates (template)
+forecast:                               # SRQ5: 80 quarterly dates (template)
   start: "2008-04-01"
   end: "2028-01-01"
   fit_window_start: "2004-01-01"        # late history used to fit decline curves

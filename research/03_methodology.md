@@ -1,7 +1,7 @@
 # 03 · Methodology
 
 > [!NOTE]
-> **Purpose of this file:** how each research question is answered — research design, data, preparation, methods,
+> **Purpose of this file:** how we answer each research question: the research design, data, preparation, methods,
 > metrics, assumptions and limitations. Formulas (F#) are in [`04_formulas.md`](04_formulas.md); references [R#] in
 > [`05_references.md`](05_references.md); results in [`06_findings_log.md`](06_findings_log.md).
 
@@ -24,11 +24,11 @@
 | Element | Choice | Justification |
 |---|---|---|
 | Research type | Quantitative, computational, simulation-based | All evidence is numerical simulator output and observed field data |
-| Approach | Deductive — hypotheses tested against data | Each SRQ has a stated hypothesis and a measurable test |
+| Approach | Deductive: hypotheses tested against data | Each SRQ has a stated hypothesis and a measurable test |
 | Strategy | Surrogate-assisted inverse modelling (history matching) + physics-constrained forecasting | Standard framework in reservoir engineering [R1][R24][R25] |
 | Unit of analysis | One simulation case (one combination of 4 parameters) | 100 cases |
 | Time horizon | History 1998-01-01 → 2008-01-01 (41 quarters); forecast 2008-04-01 → 2028-01-01 (80 quarters) | Set by the data and the template |
-| Philosophy | Positivist — claims tested against data; uncertainty reported rather than a single "true" answer | Non-uniqueness of history matching [R1] |
+| Philosophy | Positivist: claims are tested against data, and uncertainty is reported rather than a single "true" answer | Non-uniqueness of history matching [R1] |
 
 ```mermaid
 flowchart LR
@@ -51,7 +51,7 @@ flowchart LR
 | 1 | `02 Field Production` → `Field Production` | Observed field rates, 41 quarters | Target of matching; start of the forecast |
 | 2 | `02 Field Production` → 3 cumulative sheets | Simulated curves, Cases 1–100 + `RAMP_History`, 11,096 timestamps | Proxy training data |
 | 3 | `01 Introduction` → `Uncertainty Values` | 100 cases × 4 parameters | Proxy inputs |
-| 4 | Files 03–08 | Grid properties: 90,365 cells/case, 42,512 active, 29 columns | **Checked, not model inputs** — every case is the base grid × its multipliers (§4, SRQ4); used for HCPV (F3a) and the reservoir layout |
+| 4 | Files 03–08 | Grid properties: 90,365 cells/case, 42,512 active, 29 columns | **Checked, not model inputs.** Every case is the base grid × its multipliers (§4, SRQ4); used for HCPV (F3a) and the reservoir layout |
 | 5 | `09 Template Deliverable` | 10 cases × 80 quarters × 3 cumulatives | Output specification |
 
 ### 2.2 Variables
@@ -60,8 +60,8 @@ flowchart LR
 |---|---|---|
 | Independent | Fault transmissibility (x₁), porosity multiplier (x₂), permeability multiplier (x₃, as ln), aquifer pore volume (x₄) | Dimensionless / as given |
 | Dependent | Cumulative oil, gas, water production vs time | STB, MSCF, STB |
-| Derived | Rates, water cut, WOR, GOR, breakthrough date, misfit Oⱼ | STB/d, fraction, MSCF/STB, date, — |
-| Controlled | Grid geometry; well and injection schedule to 2008 | — |
+| Derived | Rates, water cut, WOR, GOR, breakthrough date, misfit Oⱼ | STB/d, fraction, MSCF/STB, date, none |
+| Controlled | Grid geometry; well and injection schedule to 2008 | Not applicable |
 | Derived from grid | HCPV = 129,421,914.67 rb × porosity multiplier (F3a). Other grid aggregates are exact functions of x₂–x₄, so not used as covariates | rb |
 
 ### 2.3 Sample and partitioning
@@ -81,17 +81,17 @@ flowchart LR
 
 ## 3. Data preparation (SRQ1)
 
-1. **Extract** — map header row 1 to case IDs; separate `RAMP_History` from the cases.
-2. **Clean** — cumulatives never decrease and are never negative (`qc_report.csv`). Grid files need no cleaning for the
+1. **Extract**: map header row 1 to case IDs; separate `RAMP_History` from the cases.
+2. **Clean**: cumulatives never decrease and are never negative (`qc_report.csv`). Grid files need no cleaning for the
    pipeline because they are not model inputs; `01_eda.ipynb` §9 reads them with −999.25 → missing and inactive cells
    (PORV = 0) excluded.
-3. **Align** — interpolate each case's **cumulatives** linearly in time onto the 41 observed dates (F20). Average rates
+3. **Align**: interpolate each case's **cumulatives** linearly in time onto the 41 observed dates (F20). Average rates
    are derived from cumulative differences (F21) in the forecast step.
-4. **Date-convention test** — misfit of all cases under the "start" and "end" conventions (F22); choose the lower
+4. **Date-convention test**: misfit of all cases under the "start" and "end" conventions (F22); choose the lower
    median misfit of the 10 best cases; report both, with `RAMP_History` as a cross-check.
-5. **Observed cumulatives** — integrate observed rates with real day counts (F14).
-6. **QC** — cumulatives non-decreasing; values ≥ 0; gas–oil ratio within 2% of 0.3633 (F13).
-7. **Features** — min–max scale x₁…x₄ (F28) with x₃ = ln(permeability multiplier).
+5. **Observed cumulatives**: integrate observed rates with real day counts (F14).
+6. **QC**: cumulatives non-decreasing; values ≥ 0; gas–oil ratio within 2% of 0.3633 (F13).
+7. **Features**: min–max scale x₁…x₄ (F28) with x₃ = ln(permeability multiplier).
 
 Output: analysis-ready table + data-quality log (the log is itself a finding).
 
@@ -117,7 +117,7 @@ In the order of the deck's workflow (slide 30).
   keeping the validated calibration.
 
 > [!TIP]
-> **Grid-feature experiment — resolved without fitting.** The grid check (`01_eda.ipynb` §9) rebuilds every case cell
+> **Grid-feature experiment: settled without fitting.** The grid check (`01_eda.ipynb` §9) rebuilds every case cell
 > by cell as the base grid × its multipliers (PORO/PORV × porosity; PERMX/Y and TRANX/Y × permeability in 11,575
 > cells; aquifer PORV in 2,286 cells; 23 columns identical; verified on 35 cases) and finds the fault multiplier absent
 > from the files. Grid aggregates are therefore exact functions of x₂–x₄ and cannot improve the proxy; the proxy's test
@@ -139,7 +139,7 @@ In the order of the deck's workflow (slide 30).
 
 | Method | Oil | Water | Gas |
 |---|---|---|---|
-| Decline (physics-based) | Hyperbolic Arps on the 2004–2008 history (F16), 0 ≤ b ≤ 1, restarted at the last actual rate with the decline rate reached by then (F16a, F17) [R13] | Two WOR trends — ln(WOR) vs cumulative oil (F18) and vs time — anchored to the last WOR, slope ≥ 0, WOR capped at 100 [R26] | Solution gas, Rs = ΔGp/ΔNp over the fit window (F13) |
+| Decline (physics-based) | Hyperbolic Arps on the 2004–2008 history (F16), 0 ≤ b ≤ 1, restarted at the last actual rate with the decline rate reached by then (F16a, F17) [R13] | Two WOR trends (ln(WOR) vs cumulative oil (F18) and vs time), anchored to the last WOR, slope ≥ 0, WOR capped at 100 [R26] | Solution gas, Rs = ΔGp/ΔNp over the fit window (F13) |
 | ML autoregressive | Gradient-boosted next-quarter ratio ln(q_o,k+1/q_o,k), given the parameters and the current state (F48), in the spirit of the deck's RNN suggestion [R28][R29] | Same model, Δln(1+WOR) | Rs × oil |
 | Naive benchmark | Last rate held constant | Last rate held constant | Last rate held constant |
 
@@ -152,8 +152,8 @@ In the order of the deck's workflow (slide 30).
 ### SRQ6: Best 10 forecasts and uncertainty
 *Deck slide 31: "Pick the best 10 forecast cases"*
 
-- 10 parameter sets with the lowest misfit, at least 0.05 apart in scaled parameter space (F49) — distinct
-  realisations, not near-copies.
+- 10 parameter sets with the lowest misfit, at least 0.05 apart in scaled parameter space (F49), so they are
+  genuinely different realisations rather than near-copies.
 - Each: proxy history → shifted to end on the observed 2008 cumulatives → forecast to 2028 → template sheets
   Case 1…10 (best first).
 - Weighted P90 / P50 / P10 across the posterior (F45); spread compared with all 100 unmatched cases.
@@ -250,9 +250,9 @@ Work happens in the notebooks; `src/*.py` files hold functions only.
 |---|---|---|
 | `notebooks/01_eda.ipynb` | Exploratory analysis of every input file; grid check | All |
 | `notebooks/02_pipeline.ipynb` | Runs the method step by step; answers the research questions | All |
-| `notebooks/03_results_figures.ipynb` | Slide figures from the saved tables | — |
-| `src/config.py` | Load `config.yaml` + `.env` (`DWC26_DATA_DIR`) | — |
-| `src/io_load.py` | Read every input file (searches sub-folders) | — |
+| `notebooks/03_results_figures.ipynb` | Slide figures from the saved tables | Supporting |
+| `src/config.py` | Load `config.yaml` + `.env` (`DWC26_DATA_DIR`) | Supporting |
+| `src/io_load.py` | Read every input file (searches sub-folders) | Supporting |
 | `src/s1_prepare.py` | Data preparation | SRQ1 |
 | `src/s2_proxy.py` | ML proxy training + calibrated prediction | SRQ4 |
 | `src/s3_history_match.py` | History matching | SRQ2 |
@@ -261,6 +261,6 @@ Work happens in the notebooks; `src/*.py` files hold functions only.
 | `src/deliverable.py` | Fill the template (a copy; the original is never edited) | Deliverable |
 | `src/s6_sensitivity.py` | Parameter influence | SRQ3 |
 | `src/grid.py` | Grid-file checks, HCPV, reservoir layout | SRQ4, SRQ3 |
-| `src/metrics.py`, `src/utils.py` | Scoring formulas; scaling, splits, weighted percentiles | — |
-| `src/plotting.py`, `src/report.py` | Figure style; generated findings text | — |
-| `src/pipeline.py` | Runs all steps in one call (used by the end-to-end test) | — |
+| `src/metrics.py`, `src/utils.py` | Scoring formulas; scaling, splits, weighted percentiles | Supporting |
+| `src/plotting.py`, `src/report.py` | Figure style; generated findings text | Supporting |
+| `src/pipeline.py` | Runs all steps in one call (used by the end-to-end test) | Supporting |

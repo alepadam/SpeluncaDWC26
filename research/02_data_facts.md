@@ -1,14 +1,14 @@
 # 02 · Data Facts
 
 > [!NOTE]
-> **Purpose of this file:** everything known about the competition and its data, read directly from the DWC26
+> **Purpose of this file:** everything we know about the competition and its data. It comes straight from the DWC26
 > starter pack, the Kick Off deck, the portal (14 Oct 2026), our own checks on the real files, and the printed outputs
-> of an external notebook we studied for understanding only (no code reused).
+> of an external notebook we studied only to understand the data (no code was reused).
 > Tags: **[Fact]** = confirmed · **[Assumption]** = still to confirm.
 
 > [!WARNING]
-> This file contains values read from competition data. Keep the repository **private** — the DWC26 rules forbid
-> publishing the data externally.
+> This file contains values read from competition data. Keep the repository **private**, because the DWC26 rules
+> forbid publishing the data externally.
 
 **Contents**
 1. [Challenge logistics](#1-challenge-logistics)
@@ -46,7 +46,7 @@ timeline
     12 Nov : Finale
 ```
 
-Submission slots lock at the deadline. Data must not be published externally.
+Submission slots lock at the deadline, and the data must not be published outside the competition.
 
 ---
 
@@ -64,7 +64,7 @@ Submission slots lock at the deadline. Data must not be published externally.
 | 30 · Workflow | Data preparation → ML proxy training → ML prediction → optimization (history matching) → forecast production. Goal: judge whether the field will make money. Rock properties are static |
 | 31 · Results | Provided curves end ~2008; "optimized curves" continue beyond with a question mark; **"Pick the best 10 forecast cases"** for the template |
 | 32 · References | GNN-LSTM proxy (Huang et al., SPE 2023); Bayesian inversion + LSTM proxy (Zhang et al., SPE 2023) |
-| 35 · Evaluation | All 4 deliverables on time; accuracy of model output (results and code review); submission quality — business understanding, technical understanding, communication & storytelling; bonus for insights, innovation, collaboration |
+| 35 · Evaluation | All 4 deliverables on time; accuracy of model output (results and code review); submission quality (business understanding, technical understanding, communication & storytelling); bonus for insights, innovation, collaboration |
 | 20 · Finale | Top 5 teams are finalists; finale on 12 Nov at Menara ExxonMobil, KLCC |
 
 > [!IMPORTANT]
@@ -79,8 +79,8 @@ Submission slots lock at the deadline. Data must not be published externally.
 
 | File | Uncompressed size | Contents | Used by the pipeline |
 |---|---|---|---|
-| README.md | 2,247 B | Topic, file list, submission rules | — |
-| DataWorks 2026 - Kick Off.pptx | 54,352,380 B | Kick Off deck (§2) | — (read for §2) |
+| README.md | 2,247 B | Topic, file list, submission rules | No |
+| DataWorks 2026 - Kick Off.pptx | 54,352,380 B | Kick Off deck (§2) | No (read for §2) |
 | 01 Introduction.xlsx | 27,439 B | Nomenclature; Uncertainty Values | **Yes** |
 | 02 Field Production.xlsx | 15,570,403 B | Observed history + 6 simulation-curve sheets | **Yes** |
 | 03 Train Cases 1.xlsx | 331,199,004 B | Grid, Cases 1–20 | Check only (`01_eda` §9) |
@@ -145,7 +145,7 @@ Case column = `Item`.
 |---|---|
 | Peak oil rate | 15,508 STB/d (1998-10-01) |
 | Plateau | Within 5% of peak until it first drops below on 2002-01-01 |
-| Oil rate at 2008-01-01 | 5,067 STB/d — 67.3% below peak |
+| Oil rate at 2008-01-01 | 5,067 STB/d (67.3% below peak) |
 | First water | 1999-04-01 |
 | Water rate exceeds oil rate | From 2006-04-01 |
 | Water cut at 2008-01-01 | 61.0% |
@@ -176,12 +176,12 @@ Case column = `Item`.
 > **Conclusion.** Every grid checked is the **same base grid with the same initial state**, changed only by the
 > porosity, permeability and aquifer multipliers; the **fault multiplier is not in the files at all**. The grids hold
 > no information beyond the 4 parameters, so they are not model inputs. From the 4 parameters alone the proxy
-> reproduces the simulator to 0.04% (oil) and 0.09% (water) on test cases — an upper bound on what any grid feature
-> could add.
+> reproduces the simulator to 0.04% (oil) and 0.09% (water) on test cases, so no grid feature could improve it by more
+> than that.
 
 ### Structure
 
-- **90,365 cells per case, 42,512 active (47.0%)** — the same cells and the same active set in every case.
+- **90,365 cells per case, 42,512 active (47.0%)**, with the same cells and the same active set in every case.
 - **29 columns**, header = description + code in brackets: I, J, K index · X, Y, Z coordinate · PORV, PORO, PERMX,
   PERMY, PERMZ, NTG, TRANX, TRANY, TRANZ, FIPNUM, PVTNUM, SWL, SWCR, SWU, SGL, SGCR, SOWCR · PRESSURE, SWAT, SOIL,
   SGAS, RS, RV.
@@ -212,8 +212,8 @@ column of every active cell was predicted as Case 1 × the multiplier ratios fro
 | Porosity | PORO and PORV of every active cell | 42,512 | PORO 2.7e-5, PORV 2.5e-7 (export rounding) |
 | Permeability | PERMX, PERMY and, through them, TRANX, TRANY in one region; PERMZ and TRANZ unchanged | 11,575 | 4.2e-6; 100% of TRANX/TRANY cells between 1 and the permeability ratio |
 | Aquifer pore volume | PORV of the aquifer cells (on top of the porosity scaling) | 2,286 | Included in PORV above |
-| Fault transmissibility | **Not present in any column.** In the 19 cases where the fault ratio cannot be confused with a permeability boundary value, 0 cells change by it — the simulator applies it on fault faces, which are not exported | — | — |
-| — | The other 23 columns (I/J/K, X/Y/Z, PERMZ, NTG, TRANZ, FIPNUM, PVTNUM, SWL, SWCR, SWU, SGL, SGCR, SOWCR, PRESSURE, SWAT, SOIL, SGAS, RS, RV) | All | Identical (difference 0) |
+| Fault transmissibility | **Not present in any column.** In the 19 cases where the fault ratio cannot be confused with a permeability boundary value, 0 cells change by it. The simulator applies it on fault faces, which are not exported | None | Not applicable |
+| None (unchanged) | The other 23 columns (I/J/K, X/Y/Z, PERMZ, NTG, TRANZ, FIPNUM, PVTNUM, SWL, SWCR, SWU, SGL, SGCR, SOWCR, PRESSURE, SWAT, SOIL, SGAS, RS, RV) | All | Identical (difference 0) |
 
 > [!NOTE]
 > Files 04–07 (cases 21–85, including all validation cases) are not checked here. Run `01_eda.ipynb` §9 with
@@ -229,9 +229,9 @@ From the base grid.
 | Aquifer cells | 2,286 | 83.5% | Grid edge, I 51–53, J 1–55; Z −8,311 to −9,153 (below the oil); none in the oil zone; very large cells |
 | Permeability region | 11,575 | 2.8% | Lower layers K 13–31; 3,759 cells in the oil zone, 7,816 below it |
 
-Z values as exported (likely ft, negative downward). The aquifer is far from and below the oil, so its support arrives
-late; the permeability multiplier acts mostly in water-bearing layers. Both are consistent with the Sobol results:
-aquifer and permeability matter more for 2028 water than for 1998–2008 production.
+Z values are shown as exported (probably feet, negative downward). The aquifer sits far away from the oil and below
+it, so its pressure support arrives late. The permeability multiplier acts mostly in water-bearing layers. Both fit
+the Sobol results: aquifer and permeability matter more for 2028 water than for 1998–2008 production.
 
 ### Initial hydrocarbon pore volume (HCPV)
 
@@ -268,7 +268,7 @@ aquifer and permeability matter more for 2028 water than for 1998–2008 product
 | # | Question | Status |
 |---|---|---|
 | 1 | Template Case 1–10 mapping | ✅ Resolved by slide 31: our best 10 forecasts |
-| 2 | Exact accuracy metric used for judging | ⏳ **Open** — slide 35 says "accuracy of model output", without a formula |
+| 2 | Exact accuracy metric used for judging | ⏳ **Open**: slide 35 says "accuracy of model output", without a formula |
 | 3 | Any simulation data after 2008? | ✅ Resolved: no (curves end 2008-01-01) |
 | 4 | Date of the grid snapshot | ✅ Resolved: initial state (identical in every case, §6) |
 | 5 | Full list of grid columns | ✅ Resolved: 29 columns (§6) |

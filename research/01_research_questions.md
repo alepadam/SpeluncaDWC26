@@ -46,7 +46,7 @@ Kick Off deck, 6 Oct 2026 [Fact].
 
 - **Suggested workflow (slide 30):** data preparation → ML proxy training → ML prediction → optimization (history
   matching) → forecast production.
-- **Template meaning (slide 31):** *"Pick the best 10 forecast cases"* — the template's Case 1–10 are our 10 best
+- **Template meaning (slide 31):** *"Pick the best 10 forecast cases"*. The template's Case 1–10 are our 10 best
   history-matched forecasts, not test cases 86–100.
 - **Business framing (slide 30):** the forecast is used to judge whether the field will make money.
 - **Stated assumption (slide 30):** rock properties are static (do not change with time).
@@ -162,7 +162,7 @@ flowchart LR
 | 3. History matching | SRQ2 | Which scenarios are credible? | Slides, Power BI |
 | 4. Forecast | SRQ5 | What happens to 2028, and how do we know the method works? | Power BI |
 | 5. Best 10 | SRQ6 | Which 10 forecasts, and how sure are we? | Template, slides, video |
-| 6. Parameter influence | SRQ3 | Why — which parameters drive the results? | Slides, report |
+| 6. Parameter influence | SRQ3 | Why? Which parameters drive the results? | Slides, report |
 
 Aligned data (SRQ1) → a proxy that generalises (SRQ4) → credible scenarios (SRQ2) → carried forward reliably (SRQ5)
 → reported with uncertainty (SRQ6), explained by the parameters (SRQ3) = the answer to the main question.
@@ -179,19 +179,19 @@ Verdicts from the run on the real data (details and numbers in [`06_findings_log
 | SRQ2 | (a) Proxy optimum beats every simulated case | ✅ Supported |
 | | (b) Non-uniqueness | ✅ Supported |
 | | (c) Accepted set stable to the error assumption | ✅ Supported |
-| SRQ3 | (a) Permeability and aquifer drive breakthrough timing | ❌ Not supported — porosity does |
+| SRQ3 | (a) Permeability and aquifer drive breakthrough timing | ❌ Not supported: porosity does |
 | | (b) Porosity drives long-term oil | ✅ Supported |
 | | (c) Fault transmissibility has the smallest effect | ✅ Supported |
 | SRQ4 | (a) Proxy error < 5% on 2008 oil | ✅ Supported |
 | | (b) 80% band holds ~80% | ✅ Supported |
-| | (c) Grids add little beyond the parameters | ✅ Supported — they add nothing |
-| SRQ5 | (a) Arps decline with 0 ≤ b ≤ 1 | ⚠️ Partly — all fits sit at b ≈ 1 |
+| | (c) Grids add little beyond the parameters | ✅ Supported: they add nothing |
+| SRQ5 | (a) Arps decline with 0 ≤ b ≤ 1 | ⚠️ Partly: all fits sit at b ≈ 1 |
 | | (b) ln(WOR) vs cumulative oil | ✅ Supported |
 | | (c) Gas = Rs × oil | ✅ Supported |
-| | (d) Physics-based decline extrapolates best | ❌ Not supported — the ML forecaster wins |
+| | (d) Physics-based decline extrapolates best | ❌ Not supported: the ML forecaster wins |
 | SRQ6 | (a) Matching narrows the range | ✅ Supported |
-| | (b) A meaningful range remains | ⚠️ Partly — small parameter range; method choice dominates |
-| | (c) Band holds ~80% in the backtest | ❌ Not supported — the band excludes method error |
+| | (b) A meaningful range remains | ⚠️ Partly: the parameter range is small; the choice of method matters more |
+| | (c) Band holds ~80% in the backtest | ❌ Not supported: the band leaves out method error |
 
 ---
 
@@ -199,6 +199,6 @@ Verdicts from the run on the real data (details and numbers in [`06_findings_log
 
 | ID | Question | Status |
 |---|---|---|
-| RQ7 | Is all produced gas solution gas? | **Answered: yes** — constant gas–oil ratio in every case and in the observed data |
+| RQ7 | Is all produced gas solution gas? | **Answered: yes.** The gas–oil ratio is constant in every case and in the observed data |
 | RQ8 | What controls water-breakthrough timing? | **Answered: porosity** (Spearman ρ = +0.854), not permeability or aquifer size |
-| RQ10 | Is one simulated case effectively the "truth" behind the observed data? | **Answered: no** — the best case (CASE 40) still has a misfit of 0.062 (~0.7% average error); the proxy optimum fits better |
+| RQ10 | Is one simulated case effectively the "truth" behind the observed data? | **Answered: no.** The best case (CASE 40) still has a misfit of 0.062 (~0.7% average error), and the proxy optimum fits better |

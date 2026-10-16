@@ -1,4 +1,4 @@
-"""Step 1 — Data preparation and analysis (SRQ1: how should simulated and observed data be aligned?).
+"""Step 1: Data preparation and analysis (SRQ1: how should simulated and observed data be aligned?).
 
 What it does
   1. Loads the 4 uncertainty parameters, the observed field rates and the 3 simulated cumulative sheets.
@@ -131,7 +131,7 @@ def run(cfg: dict) -> dict:
     params = params.loc[common]
     sim_cum = {k: v[common] for k, v in sim_cum.items()}
 
-    # SRQ1 — which observed-rate convention matches the simulator's cumulatives?
+    # SRQ1: which observed-rate convention matches the simulator's cumulatives?
     m = cfg["matching"]
     rows, obs_by_conv = [], {}
     sim_stack = {k: sim_cum[k].to_numpy().T for k in PHASES}  # N x T

@@ -1,4 +1,4 @@
-"""Step 6 — Parameter influence (SRQ3: which of the 4 parameters control production, and how?).
+"""Step 6: Parameter influence (SRQ3: which of the 4 parameters control production, and how?).
 
   * Spearman rank correlation, parameter vs outcome, over the 100 simulated cases
     (2008 cumulatives, water breakthrough date, history misfit, forecast 2028 cumulatives).

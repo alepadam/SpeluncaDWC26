@@ -1,4 +1,4 @@
-"""Step 2 — ML proxy training and prediction (SRQ4: can a proxy reproduce the simulator on unseen cases?).
+"""Step 2: ML proxy training and prediction (SRQ4: can a proxy reproduce the simulator on unseen cases?).
 
 Model (deck slide 27, "design an architecture"): a linear autoencoder (PCA) compresses each case's
 3 x 41 cumulative curves to K scores; one Gaussian process per score maps the 4 scaled parameters to it

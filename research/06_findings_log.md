@@ -82,7 +82,7 @@ From `01_eda.ipynb`.
 | Validation MAPE at 2008: oil 0.023%, gas 0.020%, water 0.104%; best baseline (gradient boosting) 0.51–0.66% → **6–26× better** | `srq4_proxy_scores.csv` |
 | Test MAPE at 2008: oil 0.038%, gas 0.038%, water 0.094%; worst single test case 0.56% | `srq4_proxy_scores.csv` |
 | 80% band coverage: 80.8% on validation, **78.2% on test** (scale factors 1.0000 / 1.0000 / 1.0012) | `srq4_proxy_uncertainty.csv` |
-| A single shared PCA (first attempt) kept 1 component and lost the minor parameters — fixed by per-phase PCA | Method note |
+| A single shared PCA (first attempt) kept 1 component and lost the minor parameters. Fixed by using one PCA per phase | Method note |
 
 ---
 
@@ -93,9 +93,9 @@ From `01_eda.ipynb`.
 | Finding | Evidence |
 |---|---|
 | Best simulated case: **CASE 40** (misfit 0.0619). Proxy optimum: misfit **0.0569**, 8.1% lower | `srq2_optimum.csv` |
-| The 15 accepted cases: 9 train, 3 validation, 3 test; water contributes a median 91% of their misfit — the hardest phase to match | `srq2_case_misfit.csv` |
+| The 15 accepted cases: 9 train, 3 validation, 3 test; water makes up a median 91% of their misfit, so it is the hardest phase to match | `srq2_case_misfit.csv` |
 | Changing the observation error to 3% or 10% keeps 15 of 15 accepted cases | `srq2_sigma_sensitivity.csv` |
-| The optimum sits at the edge of the design range for fault, permeability and aquifer — the poorly identified parameters, where the misfit is nearly flat | `srq2_optimum.csv` |
+| The optimum sits at the edge of the design range for fault, permeability and aquifer. These are the poorly identified parameters, where the misfit is nearly flat | `srq2_optimum.csv` |
 | Posterior weights vary only 1.016× across the 500 kept samples (misfit averaged over dates) → in effect the best 500 of 20,000, almost equally weighted | `srq2_posterior_samples.csv` |
 
 **Identifiability** (weighted P10–P90 of the posterior as a share of the design range):
@@ -120,7 +120,7 @@ best extrapolator.
 | **ML autoregressive beats decline** on validation (oil + water increment error 5.5% vs 13.2%; naive 33.1%) → selected | `srq5_method_selection.csv` |
 | Same winner on test cases (not used for the choice): ML 5.4%, decline 12.2% | `srq5_backtest_cases.csv` |
 | Arps exponent b: median 0.994; all 100 cases have b > 0.95 (decline flattening toward harmonic) | `srq5_all_cases_2028.csv` |
-| Decline gives more 2028 oil than ML in 100% of cases — the method choice shifts the forecast systematically | `srq5_all_cases_2028.csv` |
+| Decline gives more 2028 oil than ML in 100% of cases, so the choice of method shifts the forecast in one direction | `srq5_all_cases_2028.csv` |
 
 ---
 
@@ -133,7 +133,7 @@ best extrapolator.
 | Best 10: porosity 1.302–1.341 (tight); permeability 4.60–9.78, aquifer 54–157, fault 0.059–0.150 (wide) | `srq6_best10.csv` |
 | Matching narrows the 2028 P10–P90 range **9–18×** (oil: 18.9 M → 1.05 M STB) | `srq6_spread_2028.csv` |
 | Posterior P10–P90 range is only 1.8% (oil), 1.8% (gas), 3.1% (water) of its P50 | `srq6_spread_2028.csv` |
-| **Model-form uncertainty exceeds parameter uncertainty:** best-10 P50 at 2028 — oil 59.0 M (ML) vs 61.3 M (decline) STB; water 79.8 M vs 94.2 M STB (gap 5.8× the posterior range) | `srq6_spread_2028.csv` |
+| **Model-form uncertainty exceeds parameter uncertainty:** best-10 P50 at 2028 is oil 59.0 M (ML) vs 61.3 M (decline) STB; water 79.8 M vs 94.2 M STB (gap 5.8× the posterior range) | `srq6_spread_2028.csv` |
 | Whole-pipeline backtest vs the real field: P50 error oil 0.8%, gas 0.8%, water 5.7%; band coverage oil 0%, gas 0%, water 6% → the band covers parameter uncertainty only | `srq6_pipeline_backtest.csv` |
 | Remaining oil 2008–2028: 20.39–21.06 M STB; 2028 oil rate 1,076–1,164 STB/d; water cut 89.8–90.2%; WOR cap reached in 0 of 10 | `srq6_business.csv` |
 | HCPV 168.5–173.5 M rb; N_p(2028) / HCPV = 0.339–0.350 STB/rb | `srq6_business.csv` |
@@ -161,8 +161,8 @@ From `01_eda.ipynb` §9 and `src/grid.check_case`; details in [`02_data_facts.md
 |---|---|
 | **No information beyond the 4 parameters (35 cases, cell by cell):** every case = Case 1 × its porosity, permeability and aquifer ratios (largest error 2.7e-5 = export rounding); 23 of 29 columns identical; TRANX/TRANY follow permeability in 100% of cells; HCPV within 2e-9 | 01_eda §9 |
 | **Fault multiplier absent from the grid files:** 0 cells change by the fault ratio in the 19 cases where it is distinguishable | 01_eda §9 |
-| **Layout:** aquifer = 2,286 edge cells below the oil holding 83.5% of the pore volume; oil zone 4.2%; permeability region in lower layers K 13–31, mostly below the oil — explains why aquifer and permeability matter more for 2028 water | 01_eda §9 |
-| First two-case check: Case 2 vs Case 1 — PORO ratio 1.135898 (expected 1.135899), PERMX/Y ratio 2.085115 in 11,575 cells (expected 2.085115), aquifer PORV ratio 1.994053 in 2,286 cells (expected 1.994053) | 01_eda §9 |
+| **Layout:** aquifer = 2,286 edge cells below the oil holding 83.5% of the pore volume; oil zone 4.2%; permeability region in lower layers K 13–31, mostly below the oil. This explains why aquifer and permeability matter more for 2028 water | 01_eda §9 |
+| First two-case check: Case 2 vs Case 1: PORO ratio 1.135898 (expected 1.135899), PERMX/Y ratio 2.085115 in 11,575 cells (expected 2.085115), aquifer PORV ratio 1.994053 in 2,286 cells (expected 1.994053) | 01_eda §9 |
 
 ---
 
@@ -178,4 +178,4 @@ From `01_eda.ipynb` §9 and `src/grid.check_case`; details in [`02_data_facts.md
 | Grid columns / snapshot date | ✅ Resolved | 29 columns; initial state, identical in every case |
 | Do grids add information beyond the 4 parameters? | ✅ Resolved: no | 35 of 100 cases checked; run `01_eda` §9 with `GRID_SCOPE = "all"` for files 04–07 |
 | Oil formation volume factor Bo | Not in the data | Recovery reported as N_p / HCPV |
-| Exact accuracy metric used for judging | ⏳ **Open** | Slide 35 only says "accuracy of model output" — ask the organisers |
+| Exact accuracy metric used for judging | ⏳ **Open** | Slide 35 only says "accuracy of model output". Ask the organisers |
