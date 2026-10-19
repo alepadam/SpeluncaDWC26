@@ -10,7 +10,8 @@
 |---|
 | Muhammad Aliff Adam bin Sultan |
 | Qistina Aqilah binti Abdul Razak Tuah |
-| Muhammad Adam Harith bin Ahmad Zaki |
+| Muhammad Adam Harith bin Mohd Zaki |
+| Aleeya Ummairah binti Ahmad Syaizam |
 
 ## What we are researching
 
